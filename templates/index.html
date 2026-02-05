@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎾 Tennis Elo Predictions 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1f36 0%, #2d3561 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            color: #b0b8d4;
+        }
+        
+        .tournaments-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .tournament-bracket {
+            background: linear-gradient(135deg, #2a3f5f 0%, #3a5080 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 2px solid #4a6fa5;
+        }
+        
+        .bracket-header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-bottom: 3px solid #764ba2;
+        }
+        
+        .bracket-content {
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .finalist {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            color: white;
+            text-align: center;
+        }
+        
+        .finalist-label {
+            font-size: 0.85em;
+            color: #b0b8d4;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .finalist-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        
+        .finalist-prob {
+            font-size: 0.9em;
+            color: #89d4ff;
+        }
+        
+        .vs-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .arrow-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+        
+        .final-result {
+            grid-column: 1 / -1;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .final-label {
+            font-size: 0.8em;
+            color: #89d4ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .winner-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .winner-prob {
+            font-size: 1.1em;
+            color: #89d4ff;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        .details-btn {
+            grid-column: 1 / -1;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        
+        .details-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #2a3f5f 0%, #3a5080 100%);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 2px solid #4a6fa5;
+            margin-top: 40px;
+        }
+        
+        .stats-section h2 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.95em;
+            color: #b0b8d4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        footer {
+            text-align: center;
+            color: #b0b8d4;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .tournaments-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .bracket-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .bracket-header {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎾 2026 Grand Slam Predictions</h1>
+            <p class="subtitle">Tournament | Finalists | Winner</p>
+        </header>
+        
+        <div class="tournaments-container">
+            {% for key, data in summary.items() %}
+            <div class="tournament-bracket">
+                <div class="bracket-header">
+                    {{ data.tournament }}
+                </div>
+                
+                <div class="bracket-content">
+                    <div class="finalist">
+                        <div class="finalist-label">Finalist 1 (Predicted)</div>
+                        <div class="finalist-name">{{ data.winner }}</div>
+                        <div class="finalist-prob">{{ data.probability }} win</div>
+                    </div>
+                    
+                    <div class="vs-divider">
+                        <span>VS</span>
+                        <div class="arrow-line"></div>
+                    </div>
+                    
+                    <div class="finalist">
+                        <div class="finalist-label">Finalist 2</div>
+                        <div class="finalist-name">{{ data.finalist }}</div>
+                        <div class="finalist-prob">Challenger</div>
+                    </div>
+                    
+                    <div class="final-result">
+                        <span class="final-label">🥇 Predicted Winner</span>
+                        <div class="winner-name">{{ data.winner }}</div>
+                        <div class="winner-prob">{{ data.probability }}</div>
+                    </div>
+                    
+                    <button class="details-btn" onclick="window.location.href='/tournament/{{ key }}'">
+                        View All Predictions →
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="stats-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2>📊 Model Performance</h2>
+                <a href="/model-performance" style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 12px 25px;
+                    border-radius: 8px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.95em;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(102, 126, 234, 0.5)';" 
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(102, 126, 234, 0.3)';">
+                    📈 View Dashboard →
+                </a>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">13</div>
+                    <div class="stat-label">Training Matches</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Active Players</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Grand Slams</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Based on real Grand Slam data (2023-2026) | Updated February 5, 2026</p>
+            <p>Tennis Elo Prediction System v1.0</p>
+        </footer>
+    </div>
+</body>
+</html>

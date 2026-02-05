@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tournament_name }} - Tennis Elo Predictions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .predictions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .predictions-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .predictions-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border: none;
+        }
+        
+        .predictions-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .predictions-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .predictions-table tbody tr:first-child {
+            background: #f0f4ff;
+        }
+        
+        .rank {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+        
+        .player-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .probability {
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .win-prob {
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+        
+        .final-prob {
+            color: #667eea;
+            font-size: 1em;
+        }
+        
+        .bar-container {
+            background: #eee;
+            border-radius: 4px;
+            height: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: width 0.3s;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .predictions-table {
+                font-size: 0.9em;
+            }
+            
+            .predictions-table th, .predictions-table td {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-link">← Back to All Tournaments</a>
+            <h1>{{ tournament_name }}</h1>
+        </header>
+        
+        <div class="content">
+            <h2>🏆 Predicted Rankings</h2>
+            
+            <table class="predictions-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Win Probability</th>
+                        <th>Final Probability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr>
+                        <td>
+                            <div class="rank">
+                                {% if player['Win_Probability'] > 0 %}
+                                    {% if loop.index0 == 0 %}🥇{% elif loop.index0 == 1 %}🥈{% elif loop.index0 == 2 %}🥉{% else %}{{ loop.index }}{% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td><div class="player-name">{{ player['Player'] }}</div></td>
+                        <td class="probability">
+                            <div class="bar-container">
+                                {% set win_pct = player['Win_Probability'] * 100 %}
+                                {% if win_pct > 0 %}
+                                    <div class="bar" style="width: {{ win_pct }}%;">
+                                        <span class="win-prob">{{ "%.0f"|format(win_pct) }}%</span>
+                                    </div>
+                                {% else %}
+                                    <span class="win-prob">0%</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="probability">
+                            <span class="final-prob">{{ "%.0f"|format(player['Final_Probability'] * 100) }}%</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-left: 4px solid #667eea; border-radius: 4px;">
+                <h3 style="color: #333; margin-bottom: 10px;">📊 Key Insights</h3>
+                <ul style="color: #666; line-height: 1.8; margin-left: 20px;">
+                    <li><strong>Win Probability:</strong> Likelihood of winning the entire tournament</li>
+                    <li><strong>Final Probability:</strong> Likelihood of reaching the finals</li>
+                    <li>Predictions based on Elo ratings and historical performance data</li>
+                    <li>Model trained on 13 real Grand Slam matches (2023-2026)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Tennis Elo Prediction System</p>
+            <p>Updated: February 5, 2026</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add hover effects to table rows
+        document.querySelectorAll('.predictions-table tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f0f4ff';
+            });
+            row.addEventListener('mouseleave', function() {
+                if(this.rowIndex === 1) {
+                    this.style.backgroundColor = '#f0f4ff';
+                } else {
+                    this.style.backgroundColor = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
